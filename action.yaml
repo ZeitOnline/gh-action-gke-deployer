@@ -1,0 +1,27 @@
+name: 'ZON GKE Deployer'
+description: 'Sets up GCP Auth and supplies tools for deployment'
+inputs:
+  gcp_credentials:
+    description: 'GCP Credentials'
+    required: false
+  project:
+    description: 'GCP Project'
+    required: false
+  zone:
+    description: 'GCP Zone'
+    required: false
+  cluster:
+    description: 'GKE Cluster'
+    required: false
+  namespace:
+    description: 'GKE Namespace'
+    required: false
+  argocd_token:
+    description: 'ArgoCD Token'
+    required: false
+  argocd_server:
+    description: 'ArgoCD Server'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
