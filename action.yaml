@@ -12,6 +12,7 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/zeitonline/gh-action-gke-deployer:v0'
+  # image: 'Dockerfile'
   args:
     - ${{ inputs.command }}
