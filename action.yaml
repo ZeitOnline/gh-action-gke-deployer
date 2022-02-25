@@ -1,6 +1,9 @@
 name: 'ZON GKE Deployer'
 description: 'Sets up GCP Auth and supplies tools for deployment'
 inputs:
+  command:
+    description: 'Command to run'
+    required: true
   gcp_credentials:
     description: 'GCP Credentials'
     required: false
@@ -25,3 +28,5 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.command }}
