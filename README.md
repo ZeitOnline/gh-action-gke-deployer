@@ -1,40 +1,21 @@
 # GKE Deployer Github Action
 
 Simple shell-based Github Action with kubectl and a configurable set of additional cloud-tools like kustomize and jsonnet.
-The `gcloud` and `kubectl` commands are wrapped in a small script which generates K8s credentials on their first invocation.
+
+Authentication for Google Cloud and Kubernetes has to be done seperately. One way is to use the official google actions [`google-github-actions/auth`](https://github.com/google-github-actions/auth) and [`google-github-actions/get-gke-credentials`](https://github.com/google-github-actions/get-gke-credentials).
 
 
 ## Customization
 
-The plugin tools are installed and versioned in `./Dockerfile`. There are examples for several tools with different installation methods.
+The plugin tools are installed and versioned in `./Dockerfile`.
 
 ## Inputs
 
-For ArgoCD only `argocd_server` and `argocd_token` must be supplied, for other commands all other inputs are required.
+For ArgoCD `argocd_server` and `argocd_token` must be supplied.
 
 #### `command`
 
 The command to execute.
-
-#### `gcp_credentials`
-
-The GCP credentials to use for authentication.
-
-#### `project`
-
-The GCP project in which the GKE cluster runs.
-
-#### `zone`
-
-The GCP zone of the project.
-
-#### `cluster`
-
-The name of the GKE cluster.
-
-#### `namespace`
-
-The namespace in the GKE cluster.
 
 #### `argocd_token`
 
@@ -49,22 +30,30 @@ The address of the ArgoCD server.
 
 
 ```yaml
-- uses: ZeitOnline/gh-action-gke-deployer@v0
-  with:
-    gcp_credentials: ${{ secret.GCP_CREDENTIALS }}
-    project: 'my-awesome-gcp-project'
-    zone: 'europe-west3-a'
-    cluster: 'staging'
-    namespace: 'my-namespace'
-- run: kubectl get deployments
-```
+env:
+  GCP_PROJECT: 'my-project'
+  GKE_ZONE: 'europe-west3-a'
+  GKE_CLUSTER: 'my-cluster'
+  ARGOCD_SERVER: 'https://argo.mycomapany.com'
 
-or
+steps:
+  # Authenticate in GCP
+  - uses: 'google-github-actions/auth@v0.6.0'
+    with:
+      credentials_json: '${{ secret.GCP_CREDENTIALS }}'
 
-```yaml
-- uses: ZeitOnline/gh-action-gke-deployer@v0
-  - with:
-    argocd_token: ${{ secret.ARGOCD_TOKEN }}
-    argocd_server: 'https://argocd.mycompany.tld'
-- run: argocd sync
+  # Get the GKE credentials and write them to KUBECONFIG
+  - uses: google-github-actions/get-gke-credentials@v0.6.0
+    with:
+      project_id: ${{ env.GCP_PROJECT }}
+      location: ${{ env.GKE_ZONE }}
+      cluster_name: ${{ env.GKE_CLUSTER }}
+
+  - uses: ZeitOnline/gh-action-gke-deployer@v0
+    with:
+      argocd_server: ${{ env.ARGOCD_SERVER }}
+      argocd_token: ${{ secret.ARGOCD_TOKEN }}
+      command: |
+        kubectl get deployments
+        kubectl get pods
 ```

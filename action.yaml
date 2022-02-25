@@ -4,21 +4,6 @@ inputs:
   command:
     description: 'Command to run'
     required: true
-  gcp_credentials:
-    description: 'GCP Credentials'
-    required: false
-  project:
-    description: 'GCP Project'
-    required: false
-  zone:
-    description: 'GCP Zone'
-    required: false
-  cluster:
-    description: 'GKE Cluster'
-    required: false
-  namespace:
-    description: 'GKE Namespace'
-    required: false
   argocd_token:
     description: 'ArgoCD Token'
     required: false
