@@ -24,4 +24,5 @@ jobs:
           push: true
           tags: |
             ghcr.io/zeitonline/gh-action-gke-deployer:${{ github.ref_name }}
+            ghcr.io/zeitonline/gh-action-gke-deployer:v0
             ghcr.io/zeitonline/gh-action-gke-deployer:latest
