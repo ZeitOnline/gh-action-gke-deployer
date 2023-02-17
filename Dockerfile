@@ -6,7 +6,8 @@ ENV JSONNET_VERSION 0.17.0
 ENV JSONNET_BUNDLER_VERSION 0.4.0
 ENV KUBECFG_VERSION 0.20.0
 ENV PLUTO_VERSION 4.2.0
-ENV LINKERD_VERSION 2.11.1
+ENV LINKERD_VERSION 2.12.3
+ENV LINKERD_SMI_VERSION 0.2.0
 ENV JQ_VERSION 1.6
 ENV ARGO_CLI_VERSION 2.1.7
 
@@ -32,6 +33,9 @@ RUN curl -L https://github.com/bitnami/kubecfg/releases/download/v${KUBECFG_VERS
 
 RUN curl -L https://github.com/linkerd/linkerd2/releases/download/stable-${LINKERD_VERSION}/linkerd2-cli-stable-${LINKERD_VERSION}-linux-amd64 -o /usr/bin/linkerd \
   && chmod +x /usr/bin/linkerd
+
+RUN curl -L https://github.com/linkerd/linkerd-smi/releases/download/v${LINKERD_SMI_VERSION}/linkerd-smi-${LINKERD_SMI_VERSION}-linux-amd64 -o /usr/bin/linkerd-smi \
+  && chmod +x /usr/bin/linkerd-smi
 
 RUN curl -fSL -o "/usr/bin/jb" "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v${JSONNET_BUNDLER_VERSION}/jb-linux-amd64" && chmod a+x "/usr/bin/jb"
 
